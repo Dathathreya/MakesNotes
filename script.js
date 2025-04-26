@@ -8,7 +8,7 @@ const trackerContainer = document.getElementById('trackerContainer');
 
 let drawing = false;
 
-Set canvas dimensions (can also be done in CSS)
+//Set canvas dimensions (can also be done in CSS)
 scribbleCanvas.width = scribbleCanvas.offsetWidth;
 scribbleCanvas.height = scribbleCanvas.offsetHeight;
 miniMapCanvas.width = trackerContainer.offsetWidth; // Mini map width based on its container
