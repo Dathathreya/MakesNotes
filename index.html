@@ -1,133 +1,17 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Scribble Pad with Tracker</title>
-	</head>
-	<style>
-		.container {
-			display: flex; /* Arrange children (tracker and scribble pad) in a row */
-			justify-content: center; /* Center the container */
-			align-items: center; /* Vertically align items */
-		}
-		
-		#trackerContainer {
-			width: 20%; /* Allocate space for the tracker */
-			height: 500px; /* Match height of scribble pad for alignment */
-			margin-right: 10px; /* Space between tracker and scribble pad */
-			position: relative; /* Needed to position the mouse indicator inside */
-			border: 1px solid #ccc; /* Add a border for clarity */
-			box-sizing: border-box; /* Include border in the element's total width and height */
-		}
-		
-		#miniMapView {
-			width: 100%; /* Make mini map canvas fill its container width */
-			height: 100%; /* Make mini map canvas fill its container height */
-			display: block; /* Remove extra space below the canvas */
-		}
-		
-		#mouseIndicator {
-			position: absolute; /* Position relative to trackerContainer */
-			width: 10px; /* Size of the mouse indicator */
-			height: 10px;
-			background-color: red; /* Color of the indicator */
-			border: 1px solid white;
-			border-radius: 50%; /* Make it a circle */
-			pointer-events: none; /* Ensure clicks go through to the canvas below if needed */
-			transform: translate(-50%, -50%); /* Center the indicator on the mouse position */
-			display: none; /* Hide initially */
-		}
-		
-		#scribblePad {
-			border: 1px solid black;
-			width: 75%; /* Allocate space for the scribble pad */
-			height: 500px; /* Set a fixed height or make it responsive */
-		}
-	</style>
-	<body>
-		<div class="container">
-			<div id="trackerContainer">
-				<canvas id="miniMapView"></canvas>
-				<div id="mouseIndicator"></div>
-			</div>
-			<canvas id="scribblePad"></canvas>
-		</div>
-		<script>			
-			const scribbleCanvas = document.getElementById('scribblePad')
-			const scribbleCtx = scribbleCanvas.getContext('2d');
-			const miniMapCanvas = document.getElementById('miniMapView');
-			const miniMapCtx = miniMapCanvas.getContext('2d');
-			const mouseIndicator = document.getElementById('mouseIndicator');
-			const trackerContainer = document.getElementById('trackerContainer');
-			
-			let drawing = false;
-			
-			// Set canvas dimensions (can also be done in CSS)
-			scribbleCanvas.width = scribbleCanvas.offsetWidth;
-			scribbleCanvas.height = scribbleCanvas.offsetHeight;
-			miniMapCanvas.width = trackerContainer.offsetWidth; // Mini map width based on its container
-			miniMapCanvas.height = trackerContainer.offsetHeight; // Mini map height based on its container
-			
-			
-			// Drawing Functions (same as before)
-			function startDrawing(e) {
-				drawing = true;
-				draw(e);
-			}
-			
-			function stopDrawing() {
-				drawing = false;
-				scribbleCtx.beginPath();
-			}
-			
-			function draw(e) {
-				if (!drawing) return;
-			
-				const rect = scribbleCanvas.getBoundingClientRect();
-				const x = e.clientX - rect.left;
-				const y = e.clientY - rect.top;
-			
-				// Draw on the scribble pad
-				scribbleCtx.lineWidth = 5;
-				scribbleCtx.lineCap = 'round';
-				scribbleCtx.strokeStyle = 'black';
-			
-				scribbleCtx.lineTo(x, y);
-				scribbleCtx.stroke();
-				scribbleCtx.beginPath();
-				scribbleCtx.moveTo(x, y);
-			
-				// Update the tracker view
-				updateTracker(x, y);
-			}
-			
-			// Tracker Functionality
-			function updateTracker(mouseX, mouseY) {
-				// Calculate scaling factors
-				const scaleX = miniMapCanvas.width / scribbleCanvas.width;
-				const scaleY = miniMapCanvas.height / scribbleCanvas.height;
-			
-				// Calculate the corresponding position in the mini map
-				const miniMapX = mouseX * scaleX;
-				const miniMapY = mouseY * scaleY;
-			
-				// Position the mouse indicator
-				mouseIndicator.style.left = `${miniMapX}px`;
-				mouseIndicator.style.top = `${miniMapY}px`;
-				mouseIndicator.style.display = 'block'; // Show the indicator
-			}
-			
-			// Hide the indicator when the mouse leaves the scribble pad
-			scribbleCanvas.addEventListener('mouseout', () => {
-				stopDrawing();
-				mouseIndicator.style.display = 'none';
-			});
-			
-			
-			// Event Listeners for Drawing
-			scribbleCanvas.addEventListener('mousedown', startDrawing);
-			scribbleCanvas.addEventListener('mouseup', stopDrawing);
-			scribbleCanvas.addEventListener('mousemove', draw);
-		</script>
-	</body>
+<head>
+    <title>Scribble Pad with Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="trackerContainer">
+            <canvas id="miniMapView"></canvas>
+            <div id="mouseIndicator"></div>
+        </div>
+        <canvas id="scribblePad"></canvas>
+    </div>
+    <script src="script.js"></script>
+</body>
 </html>
-
